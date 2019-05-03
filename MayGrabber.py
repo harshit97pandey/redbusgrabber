@@ -65,7 +65,7 @@ if __name__ == "__main__":
         wb = openpyxl.load_workbook(file_path)
 
         driver = webdriver.Chrome(options=getChromeOptions())        
-        
+
         grabFromSite(True)
         grabFromSite(False)            
 

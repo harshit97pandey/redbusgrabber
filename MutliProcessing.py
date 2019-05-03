@@ -1,5 +1,4 @@
 from selenium import webdriver
-import time
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import datetime
@@ -7,6 +6,11 @@ import openpyxl
 from pathlib import Path
 from multiprocessing import Process
 import pandas
+
+class Inputs:
+    def __init__(self, flag, file_path):
+        self.flag = flag
+        self.file_path = file_path
 
 def getValue(div_list,i,a,b):
     try:
@@ -45,13 +49,13 @@ def appendData(div_list, sheet, j, _from, _to):
         _from,
         _to,
         datetime.datetime.now(),
-        "05-"+ str(j)+"-2019"))    
+        datetime.date(2019, j, 8)))    
 
 def grabFromSite(Inputs):
     driver = webdriver.Chrome(options=getChromeOptions())      
     wb = openpyxl.load_workbook(Inputs.file_path)    
 
-    for j in range(3,4):
+    for j in range(3,32):
         if Inputs.flag:
             driver.get(getUrlForBToC(j))
         else:
@@ -65,15 +69,9 @@ def grabFromSite(Inputs):
             appendData(div_list, wb['Sheet1'], j, "Bengaluru", "Chennai")
         else:
             appendData(div_list, wb['Sheet1'], j, "Chennai", "Bengaluru")    
-    wb.save(Inputs.file_path)       
-    
+    wb.save(Inputs.file_path)           
 
-class Inputs:
-    def __init__(self, flag, file_path):
-        self.flag = flag
-        self.file_path = file_path
-
-def mergeData(file_path1, file_path2):
+def mergeData(file_path1, file_path2, target_file_path):
     df1 = pandas.read_excel(file_path1, header = None)
     df2 = pandas.read_excel(file_path2, header = None)
 
@@ -83,16 +81,12 @@ def mergeData(file_path1, file_path2):
 
     all_data.to_excel(target_file_path, sheet_name = 'Sheet1', index = False)
 
-
-
-
-
 if __name__ == "__main__":        
 
     file_path1 = r"C:\Users\rajesh.khanna\Desktop\Data1.xlsx"
     file_path2 = r"C:\Users\rajesh.khanna\Desktop\Data2.xlsx"
 
-    target_file_path = r"C:\Users\rajesh.khanna\Desktop\Data1.xlsx"
+    target_file_path = r"C:\Users\rajesh.khanna\Desktop\Combined.xlsx"
 
     input1 = Inputs(True, file_path1)
     input2 = Inputs(False, file_path2)
@@ -102,7 +96,9 @@ if __name__ == "__main__":
     p1.start()
     p2.start()
     p1.join()
-    p2.join()    
+    p2.join() 
+
+    mergeData(file_path1, file_path2, target_file_path)   
 
 
 
