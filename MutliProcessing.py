@@ -49,13 +49,13 @@ def appendData(div_list, sheet, j, _from, _to):
         _from,
         _to,
         datetime.datetime.now(),
-        datetime.date(2019, j, 8)))    
+        datetime.date(2019, 5, j)))    
 
 def grabFromSite(Inputs):
     driver = webdriver.Chrome(options=getChromeOptions())      
     wb = openpyxl.load_workbook(Inputs.file_path)    
 
-    for j in range(3,32):
+    for j in range(datetime.datetime.today().day,32):
         if Inputs.flag:
             driver.get(getUrlForBToC(j))
         else:
