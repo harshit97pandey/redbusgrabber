@@ -36,7 +36,7 @@ header = {
 
 start_time = default_timer()
 _currentDate = datetime.datetime.today()
-path = r"C:\Users\Rajesh\Desktop\Data.json"
+path = r"C:\Users\Rajesh\Desktop\Data\\" + str(datetime.datetime.today().day) + "-" + str(datetime.datetime.today().month) + ".json"
 
 with open(path, "a") as f:  
     for i in range(30):
